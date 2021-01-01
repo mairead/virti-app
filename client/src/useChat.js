@@ -10,11 +10,10 @@ const useChat = (roomId) => {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = socketIOClient(socketURL);
-
-    // socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
-    //   query: { roomId },
-    // });
+    // socketRef.current = socketIOClient(socketURL);
+    socketRef.current = socketIOClient(socketURL, {
+      query: { roomId },
+    });
 
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
       const incomingMessage = {
