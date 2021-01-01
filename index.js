@@ -6,19 +6,19 @@ var http = require('http');
 var socketIO = require('socket.io');
 const path = require('path');
 
-var fileServer = new(nodeStatic.Server)();
+var fileServer = new(nodeStatic.Server)('./client/build');
 
 var app = http.createServer(function(req, res) {
   fileServer.serve(req, res);
 }).listen(process.env.PORT || 8080);
 
 
-if(process.env.PROD) {
-  fileServer.use(path.join(__dirname, './client/build'));
-  fileServer.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './client/build/index.html'));
-  });
-}
+// if(process.env.PROD) {
+//   fileServer.use(path.join(__dirname, './client/build'));
+//   fileServer.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, './client/build/index.html'));
+//   });
+// }
 
 var io = socketIO(app, {
   cors: {
