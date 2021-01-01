@@ -7,12 +7,13 @@ var socketIO = require('socket.io');
 const path = require('path');
 
 var fileServer = new(nodeStatic.Server)();
+
 var app = http.createServer(function(req, res) {
   fileServer.serve(req, res);
 }).listen(process.env.PORT || 8080);
 
 if(process.env.PROD) {
-  app.use(fileServer(path.join(__dirname, './client/build')));
+  app.use(fileServer.serve(path.join(__dirname, './client/build')));
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './client/build/index.html'));
   });
