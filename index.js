@@ -26,6 +26,7 @@ app.listen(port, function () {
 var io = socketIO(server, {
   cors: {
     origin: ["https://hidden-sierra-24434.herokuapp.com/", "localhost:3000"],
+    methods: "GET,POST"
   },
 });
 
