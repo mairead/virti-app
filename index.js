@@ -10,6 +10,11 @@ const path = require('path');
 const app = express();
 const server = require('http').createServer(app);
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 // Priority serve any static files.
 app.use(express.static(path.resolve(__dirname, './client/build')));
 
