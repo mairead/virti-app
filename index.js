@@ -2,36 +2,37 @@
 
 require("dotenv").config();
 
-const os = require('os');
 const express = require('express');
 const http = require('http');
+const app = express();
+const server = require('http').createServer(app);
 const socketIO = require('socket.io');
 const path = require('path');
 
-const app = express();
-const server = require('http').createServer(app);
+if (process.env.PROD) {
+  // Priority serve any static files.
+  app.use(express.static(path.resolve(__dirname, './client/build')));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
-// Priority serve any static files.
-app.use(express.static(path.resolve(__dirname, './client/build')));
-
-// All remaining requests return the React app, so it can handle routing.
-app.get('*', function(request, response) {
-  response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
-});
+  // All remaining requests return the React app, so it can handle routing.
+  app.get('*', function(request, response) {
+    response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+  });
+} else {
+  app.use(express.static(path.resolve(__dirname, './client/public')));
+  app.get('*', function(request, response) {
+    response.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
+  });
+}
 
 const port = process.env.PORT || 8080;
+
 app.listen(port, function () {
   console.error(`listening on port ${port}`);
 });
 
 const io = socketIO(server, {
   cors: {
-    origin: ["https://hidden-sierra-24434.herokuapp.com/", "localhost:3000", "http://127.0.0.1:3000"],
+    origin: '*',
     methods: "GET,POST"
   },
 });

@@ -7,6 +7,7 @@ import ChatRoom from "./ChatRoom/ChatRoom";
 import Layout from "./Layout/Layout";
 
 function App() {
+  console.log('env???', process.env.NODE_ENV);
   return (
     <Router>
       <Layout>
