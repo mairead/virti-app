@@ -9,10 +9,11 @@ const path = require('path');
 var fileServer = new(nodeStatic.Server)();
 var app = http.createServer(function(req, res) {
   fileServer.serve(req, res);
-}).listen(8080);
+}).listen(process.env.PORT || 8080);
 
 var io = socketIO(app, {
   cors: {
+    // origin: process.env.PORT ? 'https://0.0.0.0:3000' : "http://localhost:3000",
     origin: "http://localhost:3000",
     methods: ["GET", "POST"]
   },
