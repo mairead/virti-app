@@ -18,6 +18,7 @@ const useChat = (roomId) => {
         ...message,
         ownedByCurrentUser: message.senderId === socketRef.current.id,
       };
+      console.log('message', message);
       setMessages((messages) => [...messages, incomingMessage]);
     });
 
@@ -30,6 +31,11 @@ const useChat = (roomId) => {
     socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
       body: messageBody,
       senderId: socketRef.current.id,
+    });
+    messages.push({
+      body: messageBody,
+      senderId: socketRef.current.id,
+      ownedByCurrentUser: true,
     });
   };
 

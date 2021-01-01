@@ -19,6 +19,8 @@ const ChatRoom = (props) => {
 
   // TODO - app isn't retaining my sent messages?
   // ownedByCurrentUser is missing from message?
+
+  console.log('messages', messages);
   return (
     <div className="chat-room-container">
       <h1 className="room-name">You are currently in {roomId}</h1>

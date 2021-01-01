@@ -1,77 +1,87 @@
 .chat-room-container {
-    width: 400px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
+  width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .room-name {
-    font-size: 24px;
-    color: rgb(17,27,50);
+  font-size: 24px;
+  color: rgb(17,27,50);
 }
 
 .messages-container {
-    flex: 1;
-    min-height: 100px;
-    overflow: auto;
-
+  flex: 1;
+  min-height: 100px;
+  overflow: auto;
 }
 
 .messages-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .new-message-input-field {
-    height: 100px;
-    font-size: 18px;
-    padding: 8px 12px;
-    resize: none;
-    border: 0;
+  height: 100px;
+  font-size: 18px;
+  padding: 8px 12px;
+  resize: none;
+  border: 0;
 }
 
 .message-item {
-    margin: 8px 0;
-    padding: 12px 8px;
-    word-break: break-word;
-    border-radius: 4px;
-    color: white;
-    position: relative;
+  margin: 8px 0;
+  padding: 12px;
+  word-break: break-word;
+  border-radius: 4px;
+  color: white;
+  position: relative;
 }
 
 .my-message {
+  background-color: rgba(17,27,50, 0.5);
+}
 
-    margin-left: auto;
+.my-message::before {
+  content: '';
+  border-radius: 5px;
+  width: 2px;
+  display: inline-block;
+  background: rgb(247, 188, 70);
+  position: absolute;
+  height: 100%;
+  top: 0px;
+  left: 0px;
 }
 
 
 .received-message {
-    background-color: rgb(17,27,50);
-    margin-right: auto;
+  background-color: rgb(17,27,50);
+  margin-right: auto;
 }
 
 .received-message::before {
-    content: '';
-    border-radius: 5px;
-    width: 2px;
-    display: inline-block;
-    background: rgb(70, 190, 175);
-    position: absolute;
-    height: 100%;
-    top: 0px;
-    left: 0px;
+  content: '';
+  border-radius: 5px;
+  width: 2px;
+  display: inline-block;
+  background: rgb(70, 190, 175);
+  position: absolute;
+  height: 100%;
+  top: 0px;
+  left: 0px;
 }
 
 .send-message-button {
-    font-size: 18px;
-    font-weight: 600;
-    color: white;
-    background: rgb(70, 190, 175);
-    padding: 12px 12px;
-    border: none;
+  font-size: 18px;
+  font-weight: 400;
+  color: white;
+  background: rgb(70, 190, 175);
+  padding: 12px 12px;
+  border: none;
 }
 
 /*.messages-container, .new-message-input-field, .send-message-button {
 
-}*/
+  }*/
