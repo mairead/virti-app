@@ -18,6 +18,10 @@ if (process.env.PROD) {
     response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
   });
 } else {
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
   app.use(express.static(path.resolve(__dirname, './client/public')));
   app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
