@@ -1,10 +1,11 @@
 'use strict';
 
-var os = require('os');
+require("dotenv").config();
 
+const os = require('os');
 const express = require('express');
-var http = require('http');
-var socketIO = require('socket.io');
+const http = require('http');
+const socketIO = require('socket.io');
 const path = require('path');
 
 const app = express();
@@ -28,7 +29,7 @@ app.listen(port, function () {
   console.error(`listening on port ${port}`);
 });
 
-var io = socketIO(server, {
+const io = socketIO(server, {
   cors: {
     origin: ["https://hidden-sierra-24434.herokuapp.com/", "localhost:3000", "http://127.0.0.1:3000"],
     methods: "GET,POST"
@@ -36,7 +37,6 @@ var io = socketIO(server, {
 });
 
 io.sockets.on('connection', function(socket) {
-
   // convenience function to log server messages on the client
   function log() {
     var array = ['Message from server:'];
