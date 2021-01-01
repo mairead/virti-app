@@ -1,6 +1,24 @@
 # virti-app
 webRTC React socket.io
 
+https://hidden-sierra-24434.herokuapp.com/
+
+## How to run the application
+- Clone the master branch into a local repository
+- Ensure you are running Node 12 
+- Run npm install in the root directory
+- The command to run the server locally is node index.js
+- cd into the /client directory and run npm install
+- The command to run the client locally is npm start
+- go to localhost:3000 and you should see the homepage which allows you to choose a room
+- Type any keyword and click join room
+- you can now send the URL to another user/browser window to join the same room
+- multiple users can join the same room
+
+**OR**
+- alternatively you can visit https://hidden-sierra-24434.herokuapp.com/ and follow the same instructions to create and join a room
+
+ 
 ## Process
 
 I started with a refresher on basic WebRCT with the Google Codelabs example. I really like the snapshot of video feature so I took that as a basis for what I wanted to achieve. Then I looked for examples where people were using React hooks and Create react app to provide the client components so I could smush them together and make a React version. You can see a list of the tutorials I followed below:
