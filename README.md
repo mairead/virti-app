@@ -5,12 +5,12 @@ https://hidden-sierra-24434.herokuapp.com/
 
 ## How to run the application
 - Clone the master branch into a local repository
-- Ensure you are running Node 12 
-- Run npm install in the root directory
-- The command to run the server locally is node index.js
-- cd into the /client directory and run npm install
-- The command to run the client locally is npm start
-- go to localhost:3000 and you should see the homepage which allows you to choose a room
+- Ensure you are running Node 12. (I use nvm) 
+- Run `npm install` in the root directory
+- The command to run the server locally is `node index.js`
+- `cd` into the `/client` directory and run `npm install`
+- The command to run the client locally is `npm start`
+- go to `localhost:3000` and you should see the homepage which allows you to choose a room
 - Type any keyword and click join room
 - you can now send the URL to another user/browser window to join the same room
 - multiple users can join the same room
@@ -40,6 +40,8 @@ I've done a lot of RTC stuff in the past but the last time I tried to work with 
 
 ## Concerns
 There isn't any STUN server configured in the app as it stands so I was actually surprised when my phone was able to connect over our home wifi. Although we have changed our home network since I last tried and failed to get something like this working which may account for that. I'd like to understand more about that and I'd like to be able to inspect the network traffic in a clearer way
+
+Also the last time I tried to implement this feature I had to create an SSL certificate for the STUN service I was using so even though the heroku app is deployed on HTTPS I'd like to understand whether the messaging is actually encrypted and how that works. 
 
 ## Research
 - expand to more than two users
