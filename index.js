@@ -12,18 +12,16 @@ const port = process.env.PORT || 8080;
 
 var fileServer = new(nodeStatic.Server)('./client/build');
 var app = http.createServer(function(req, res) {
+  res.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
   fileServer.serve(req, res);
 }).listen(port);
-
 
 // if (process.env.PROD) {
 //   // Priority serve any static files.
 //   app.use(express.static(path.resolve(__dirname, './client/build')));
 
 //   // All remaining requests return the React app, so it can handle routing.
-//   app.get('*', function(request, response) {
-//     response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
-//   });
+
 // } else {
 //   app.use((req, res, next) => {
 //     res.header('Access-Control-Allow-Origin', '*');
