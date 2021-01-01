@@ -47,7 +47,7 @@ var app = http.createServer(function(req, res) {
 //   },
 // });
 
-var io = socketIO(server, {
+var io = socketIO(app, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"]
