@@ -11,6 +11,13 @@ var app = http.createServer(function(req, res) {
   fileServer.serve(req, res);
 }).listen(process.env.PORT || 8080);
 
+if(process.env.PROD) {
+  app.use(fileServer(path.join(__dirname, './client/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './client/build/index.html'));
+  });
+}
+
 var io = socketIO(app, {
   cors: {
     // origin: process.env.PORT ? 'https://0.0.0.0:3000' : "http://localhost:3000",
