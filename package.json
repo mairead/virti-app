@@ -10,6 +10,6 @@
   },
   "scripts": {
     "start": "PROD=true node index.js",
-    "postinstall": "cd ./client && npm i && npm build"
+    "postinstall": "cd ./client && npm i"
   }
 }
