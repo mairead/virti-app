@@ -1,13 +1,13 @@
 # virti-app
 webRTC React socket.io
 
-# process
+## process
 
-# decisions
+## decisions
 
-# concerns
+## concerns
 
-Research
+## Research
 - expand to more than two users
 - add streaming for observation
 - frameworks and solutions
