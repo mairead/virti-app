@@ -5,11 +5,6 @@
   flex-direction: column;
 }
 
-.room-name {
-  font-size: 24px;
-  color: rgb(17,27,50);
-}
-
 .messages-container {
   flex: 1;
   min-height: 100px;
@@ -28,6 +23,7 @@
   padding: 8px 12px;
   resize: none;
   border: 0;
+  color: rgb(17, 27, 50);
 }
 
 .message-item {

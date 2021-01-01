@@ -23,7 +23,7 @@ const ChatRoom = (props) => {
   console.log('messages', messages);
   return (
     <div className="chat-room-container">
-      <h1 className="room-name">You are currently in {roomId}</h1>
+      <h1>You are currently in {roomId}</h1>
       <div className="messages-container">
         <ol className="messages-list">
           {messages.map((message, i) => (
