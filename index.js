@@ -30,9 +30,16 @@ app.listen(port, function () {
   console.error(`listening on port ${port}`);
 });
 
-const io = socketIO(server, {
+// const io = socketIO(server, {
+//   cors: {
+//     origin: '*',
+//     methods: ["GET", "POST"]
+//   },
+// });
+
+var io = socketIO(server, {
   cors: {
-    origin: '*',
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"]
   },
 });
