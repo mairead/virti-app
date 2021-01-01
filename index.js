@@ -1,28 +1,31 @@
 'use strict';
 
 var os = require('os');
-var nodeStatic = require('node-static');
+
+const express = require('express');
 var http = require('http');
 var socketIO = require('socket.io');
 const path = require('path');
 
-var fileServer = new(nodeStatic.Server)('./client/build/index.html');
+const app = express();
+const server = require('http').createServer(app);
 
-var app = http.createServer(function(req, res) {
-  fileServer.serve(req, res);
-}).listen(process.env.PORT || 8080);
+// Priority serve any static files.
+app.use(express.static(path.resolve(__dirname, './client/build')));
 
-// if (process.env.PROD) {
-//   fileServer.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, './client/build/index.html'));
-//   });
-// }
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function(request, response) {
+  response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+});
 
-var io = socketIO(app, {
+const port = process.env.PORT || 8080;
+app.listen(port, function () {
+  console.error(`listening on port ${port}`);
+});
+
+var io = socketIO(server, {
   cors: {
-    // origin: process.env.PORT ? 'https://0.0.0.0:3000' : "http://localhost:3000",
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: "*",
   },
 });
 
