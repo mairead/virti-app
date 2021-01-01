@@ -1,55 +1,48 @@
 'use strict';
 
 require('dotenv').config();
-var os = require('os');
 var nodeStatic = require('node-static');
 var http = require('http');
-var socketIO = require('socket.io');
 const path = require('path');
+
+const express = require("express");
+const app = express();
+const server = http.createServer(app);
+const socketIO = require("socket.io");
 
 const port = process.env.PORT || 8080;
 
-var fileServer = new(nodeStatic.Server)('./client/build');
-var app = http.createServer(function(req, res) {
-  res.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
-  fileServer.serve(req, res);
-}).listen(port);
-
-// if (process.env.PROD) {
-//   // Priority serve any static files.
-//   app.use(express.static(path.resolve(__dirname, './client/build')));
-
-//   // All remaining requests return the React app, so it can handle routing.
-
-// } else {
-//   app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     next();
-//   });
-//   app.use(express.static(path.resolve(__dirname, './client/public')));
-//   app.get('*', function(request, response) {
-//     response.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
-//   });
-// }
-
-
-// app.listen(port, function () {
-//   console.error(`listening on port ${port}`);
-// });
-
-// const io = socketIO(server, {
-//   cors: {
-//     origin: '*',
-//     methods: ["GET", "POST"]
-//   },
-// });
-
-var io = socketIO(app, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  },
+const expressServer = app.listen(port, function () {
+  console.error(`listening on port ${port}`);
 });
+
+// var fileServer = new(nodeStatic.Server)('./client/build');
+// var app = http.createServer(function(req, res) {
+
+//   fileServer.serve(req, res);
+// }).listen(port);
+
+if (process.env.PROD) {
+  // Priority serve any static files.
+  app.use(express.static(path.resolve(__dirname, './client/build')));
+
+  // All remaining requests return the React app, so it can handle routing.
+  app.get('*', function(request, response) {
+    response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+  });
+} else {
+  // app.use((req, res, next) => {
+  //   res.header('Access-Control-Allow-Origin', '*');
+  //   next();
+  // });
+  app.use(express.static(path.resolve(__dirname, './client/public')));
+  app.get('*', function(request, response) {
+    response.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
+  });
+}
+
+var io = socketIO(expressServer);
+// ????? - why is this not working with express??? :(
 
 io.sockets.on('connection', function(socket) {
   // convenience function to log server messages on the client
