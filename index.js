@@ -1,14 +1,17 @@
 'use strict';
 
+require('dotenv').config();
 var os = require('os');
 var nodeStatic = require('node-static');
 var http = require('http');
 var socketIO = require('socket.io');
 
-var fileServer = new(nodeStatic.Server)();
+const port = process.env.PORT || 8080;
+
+var fileServer = new(nodeStatic.Server)('./client/build');
 var app = http.createServer(function(req, res) {
   fileServer.serve(req, res);
-}).listen(8080);
+}).listen(port);
 
 var io = socketIO(app, {
   cors: {
