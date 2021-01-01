@@ -5,5 +5,9 @@
   "dependencies": {
     "node-static": "^0.7.10",
     "socket.io": "^3.0.4"
+  },
+  "scripts": {
+    "start": "PROD=true node index.js",
+    "postinstall": "cd ./client && npm i"
   }
 }
