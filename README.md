@@ -28,12 +28,14 @@ I started with a refresher on basic WebRCT with the Google Codelabs example. I r
 - https://codelabs.developers.google.com/codelabs/webrtc-web#9
 - https://github.com/coding-with-chaim/native-webrtc
 
-Once I had a basic chat example working I started looking into deploying this onto Heroku and I realised I had to switch out my NodeStatic server for express to be able to specify the static build folders for a compiled React app in the client. I got bogged down a lot trying get the CORS to stop complaining in localhost
+Once I had a basic chat example working I started looking into deploying this onto Heroku and I realised I had to switch out my NodeStatic server for Express to be able to specify the static build folders for a compiled React app in the client. I got bogged down a lot trying get the CORS to stop complaining in localhost
 
 Deployment examples for React/RTC to heroku:
 - https://github.com/mars/heroku-cra-node
 - https://eugrdn.me/blog/react-socketio-heroku/
 - https://www.youtube.com/watch?v=CrZ2JgLljAk
+
+Once I had a basic mesage app running I went back to add in the video capability but I realised I couldn't view the video capture across two devices because I was running it in localhost and not through https so then I started looking at utilities for adding self cert locally and found https://www.npmjs.com/package/https-localhost which is built on top of mkcert but I chickened out in the end and just pushed it up onto heroku
 
 ## Decisions
 I've done a lot of RTC stuff in the past but the last time I tried to work with it I found out PeerJS is not really supported any more and I didn't have any STUN or TURN provision so this time I started looking for examples where that was explicitly mentioned. I wasn't sure how robust the application had to be. 
@@ -41,9 +43,11 @@ I've done a lot of RTC stuff in the past but the last time I tried to work with 
 I opted for Heroku for deployment because I've always used it in the past and I really like their documentation but I've also heard good things about netlify which seems very popular with the React community. 
 
 ## Concerns
-There isn't any STUN server configured in the app as it stands so I was actually surprised when my phone was able to connect over our home wifi. Although we have changed our home network since I last tried and failed to get something like this working which may account for that. I'd like to understand more about that and I'd like to be able to inspect the network traffic in a clearer way because I'm still hazy on exactly what's happening at the NAT layer. 
+I was surprised when my phone was able to connect over our home wifi before I added any STUN config. Although we have changed our home network since I last tried and failed to get something like this working which may account for that. I'd like to understand more about that and I'd like to be able to inspect the network traffic in a clearer way because I'm still hazy on exactly what's happening at the NAT layer. I found a couple of suggestions for plugins and extensions for debugging that.
 
-Also the last time I tried to implement this feature I had to create an SSL certificate for the STUN service so I was expecting that to be a requirement for hosting in HTTPS. Even though the heroku app is deployed on HTTPS I'd like to understand whether the messaging is actually encrypted and how that works because I'm not hugely experienced in deployment and security architecture
+Also the last time I tried to implement this feature I had to create an SSL certificate for the STUN service and I was expecting that to be a requirement for hosting in HTTPS. Even though the heroku app is deployed on HTTPS I'd like to understand whether the messaging is actually encrypted and how that works because I'm not hugely experienced in deployment and security architecture
+
+I got it working across 2 separate laptops. The chat room page doesn't seem to load at all on our ancient ipad. I didn't bother debugging what was happening there. I made my brother test the remote connection from his flat in London. The text messaging worked but not the camera feed. I am guessing that's because it needs a TURN server to pipe the media stream in the data channel across the network but the text messaging could be passed more easily through STUN?
 
 ## Research
 If I was going to extend the app to handle multiple users then I would probably want to hold a collection of instantiated peer connections and the session state of users joined to each room in the server. In a production scenario you'd probably want to bolt some kind of authentication on to users so I'm assuming you'd have a DB of users already.
