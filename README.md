@@ -20,7 +20,6 @@ https://hidden-sierra-24434.herokuapp.com/
 
  
 ## Process
-
 I started with a refresher on basic WebRCT with the Google Codelabs example. I really like the snapshot of video feature so I took that as a basis for what I wanted to achieve. Then I looked for examples where people were using React hooks and Create react app to provide the client components so I could smush them together and make a React version. You can see a list of the tutorials I followed below:
 
 - https://medium.com/swlh/build-a-real-time-chat-app-with-react-hooks-and-socket-io-4859c9afecb0
@@ -35,7 +34,7 @@ Deployment examples for React/RTC to heroku:
 - https://eugrdn.me/blog/react-socketio-heroku/
 - https://www.youtube.com/watch?v=CrZ2JgLljAk
 
-Once I had a basic mesage app running I went back to add in the video capability but I realised I couldn't view the video capture across two devices because I was running it in localhost and not through https so then I started looking at utilities for adding self cert locally and found https://www.npmjs.com/package/https-localhost which is built on top of mkcert but I chickened out in the end and just pushed it up onto heroku
+After the simple mesage app was deployed I went back to add in the video capability but I realised I couldn't view the video capture across two devices because I was running it in localhost and not through https so then I started looking at utilities for adding self cert locally and found https://www.npmjs.com/package/https-localhost which is built on top of mkcert but I chickened out in the end and just pushed it up onto heroku
 
 ## Decisions
 I've done a bit of RTC stuff in the past but the last time I tried to work with it I found out PeerJS is not really supported any more and I didn't have any STUN or TURN provision so this time I started looking for examples where that was explicitly mentioned. I wasn't sure how robust the application had to be. 
@@ -47,7 +46,9 @@ I was surprised when my phone was able to connect over our home wifi before I ad
 
 Also the last time I tried to implement this feature I had to create an SSL certificate for the STUN service and I was expecting that to be a requirement for hosting in HTTPS. Even though the heroku app is deployed on HTTPS I'd like to understand whether the messaging is actually encrypted and how that works because I'm not hugely experienced in deployment and security architecture
 
-I got it working across 2 separate laptops. The chat room page doesn't seem to load at all on our ancient ipad. I didn't bother debugging what was happening there. I made my brother test the remote connection from his flat in London. The text messaging worked but not the camera feed. I am guessing that's because it needs a TURN server to pipe the media stream in the data channel across the network but the text messaging could be passed more easily through STUN? I suppose it could also be because it's not actually sending the page in an encrypted way because it doesn't have a certificate? I found the https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/ utility for checking if you've got correct STUN and TURN config
+I got it working across 2 separate laptops. The chat room page doesn't seem to load at all on our ancient ipad. I didn't bother debugging what was happening there. I made my brother test the remote connection from a separate location. The text messaging worked but not the camera feed. I am guessing that's because it needs a TURN server to pipe the media stream in the data channel across the network but the text messaging could be passed more easily through STUN? I suppose it could also be because it's not actually sending the page in an encrypted way because it doesn't have a certificate? I found the https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/ utility for checking if you've got correct STUN and TURN config
+
+I've got some dependency errors in React useEffect because I'm using it to initialise a bunch of stuff and I also have a proxy error in the client console which I was ignoring. 
 
 ##  Further work
 The first place I would start on improving the application is refactoring the logic into smaller hooks. It's got two separate calls to connect to socket.io (because I was using 2 different examples to make the chat messages and the video messages) so I would implement a single call and then pass that down to the children components using a context provider so they could share the connection. I put all the logic into a single component to make it easier to write quickly but if I was putting this into production I would break it down into smaller chunks and write unit tests around my chunks. I decided I'd rather spend my time trying to get the interesting RTC stuff to work rather than refactoring React
