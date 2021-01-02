@@ -38,7 +38,7 @@ Deployment examples for React/RTC to heroku:
 Once I had a basic mesage app running I went back to add in the video capability but I realised I couldn't view the video capture across two devices because I was running it in localhost and not through https so then I started looking at utilities for adding self cert locally and found https://www.npmjs.com/package/https-localhost which is built on top of mkcert but I chickened out in the end and just pushed it up onto heroku
 
 ## Decisions
-I've done a lot of RTC stuff in the past but the last time I tried to work with it I found out PeerJS is not really supported any more and I didn't have any STUN or TURN provision so this time I started looking for examples where that was explicitly mentioned. I wasn't sure how robust the application had to be. 
+I've done a bit of RTC stuff in the past but the last time I tried to work with it I found out PeerJS is not really supported any more and I didn't have any STUN or TURN provision so this time I started looking for examples where that was explicitly mentioned. I wasn't sure how robust the application had to be. 
 
 I opted for Heroku for deployment because I've always used it in the past and I really like their documentation but I've also heard good things about netlify which seems very popular with the React community. 
 
