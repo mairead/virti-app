@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import io from "socket.io-client";
 
 import "./ChatRoom.scss";
-// import useChat from "../useChat";
+import useChat from "../useChat";
 
 const ChatRoom = (props) => {
   const userVideo = useRef();
@@ -13,13 +13,10 @@ const ChatRoom = (props) => {
   const userStream = useRef();
 
   const { roomID } = props.match.params;
-  // const { messages, sendMessage } = useChat(roomId);
+  const { messages, sendMessage } = useChat(roomID);
   const [newMessage, setNewMessage] = React.useState("");
-  const messages = [];
-  const sendMessage = () => {};
 
   useEffect(() => {
-    console.log(navigator.mediaDevices);
     navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
       userVideo.current.srcObject = stream;
       userStream.current = stream;

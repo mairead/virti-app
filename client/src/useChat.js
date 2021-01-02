@@ -5,13 +5,13 @@ const NEW_CHAT_MESSAGE_EVENT = "message";
 
 const socketURL = '/';
 
-const useChat = (roomId) => {
+const useChat = (roomID) => {
   const [messages, setMessages] = useState([]);
   const socketRef = useRef();
 
   useEffect(() => {
     socketRef.current = socketIOClient(socketURL, {
-      query: { roomId },
+      query: { roomID },
     });
 
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
@@ -25,7 +25,7 @@ const useChat = (roomId) => {
     return () => {
       socketRef.current.disconnect();
     };
-  }, [roomId]);
+  }, [roomID]);
 
   const sendMessage = (messageBody) => {
     socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
