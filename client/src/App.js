@@ -7,13 +7,12 @@ import ChatRoom from "./ChatRoom/ChatRoom";
 import Layout from "./Layout/Layout";
 
 function App() {
-  console.log('env???', process.env.NODE_ENV);
   return (
     <Router>
       <Layout>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/:roomId" component={ChatRoom} />
+          <Route exact path="/:roomID" component={ChatRoom} />
         </Switch>
       </Layout>
     </Router>

@@ -78,6 +78,15 @@
   border: none;
 }
 
-/*.messages-container, .new-message-input-field, .send-message-button {
+.videos {
+  display: flex;
+  flex-direction: row;
+}
+.video-container {
+  width: 48%;
+  border: 1px solid rgb(17,27,50);
+}
 
-  }*/
+.video-container:first-of-type {
+  margin-right: 10px;
+}

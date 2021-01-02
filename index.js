@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config();
-var nodeStatic = require('node-static');
+
 var http = require('http');
 const path = require('path');
 
@@ -16,12 +16,6 @@ const expressServer = app.listen(port, function () {
   console.error(`listening on port ${port}`);
 });
 
-// var fileServer = new(nodeStatic.Server)('./client/build');
-// var app = http.createServer(function(req, res) {
-
-//   fileServer.serve(req, res);
-// }).listen(port);
-
 if (process.env.PROD) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, './client/build')));
@@ -31,18 +25,15 @@ if (process.env.PROD) {
     response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
   });
 } else {
-  // app.use((req, res, next) => {
-  //   res.header('Access-Control-Allow-Origin', '*');
-  //   next();
-  // });
   app.use(express.static(path.resolve(__dirname, './client/public')));
   app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
   });
 }
 
+const rooms = {};
+
 var io = socketIO(expressServer);
-// ????? - why is this not working with express??? :(
 
 io.sockets.on('connection', function(socket) {
   // convenience function to log server messages on the client
@@ -58,47 +49,29 @@ io.sockets.on('connection', function(socket) {
     socket.broadcast.emit('message', message);
   });
 
-  socket.on('create or join', function(room) {
-    log('Received request to create or join room ' + room);
-
-    var clientsInRoom = io.sockets.adapter.rooms[room];
-    var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
-    log('Room ' + room + ' now has ' + numClients + ' client(s)');
-
-    if (numClients === 0) {
-      socket.join(room);
-      log('Client ID ' + socket.id + ' created room ' + room);
-      socket.emit('created', room, socket.id);
-    } else if (numClients === 1) {
-      log('Client ID ' + socket.id + ' joined room ' + room);
-      // io.sockets.in(room).emit('join', room);
-      socket.join(room);
-      socket.emit('joined', room, socket.id);
-      io.sockets.in(room).emit('ready', room);
-      socket.broadcast.emit('ready', room);
-    } else { // max two clients
-      socket.emit('full', room);
+  socket.on("join room", roomID => {
+    if (rooms[roomID]) {
+        rooms[roomID].push(socket.id);
+    } else {
+        rooms[roomID] = [socket.id];
+    }
+    const otherUser = rooms[roomID].find(id => id !== socket.id);
+    if (otherUser) {
+        socket.emit("other user", otherUser);
+        socket.to(otherUser).emit("user joined", socket.id);
     }
   });
 
-  socket.on('ipaddr', function() {
-    var ifaces = os.networkInterfaces();
-    for (var dev in ifaces) {
-      ifaces[dev].forEach(function(details) {
-        if (details.family === 'IPv4' && details.address !== '127.0.0.1') {
-          socket.emit('ipaddr', details.address);
-        }
-      });
-    }
+  socket.on("offer", payload => {
+    io.to(payload.target).emit("offer", payload);
   });
 
-  socket.on('disconnect', function(reason) {
-    console.log(`Peer or server disconnected. Reason: ${reason}.`);
-    socket.broadcast.emit('bye');
+  socket.on("answer", payload => {
+    io.to(payload.target).emit("answer", payload);
   });
 
-  socket.on('bye', function(room) {
-    console.log(`Peer said bye on room ${room}.`);
+  socket.on("ice-candidate", incoming => {
+    io.to(incoming.target).emit("ice-candidate", incoming.candidate);
   });
 });
 
