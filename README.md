@@ -49,7 +49,9 @@ Also the last time I tried to implement this feature I had to create an SSL cert
 
 I got it working across 2 separate laptops. The chat room page doesn't seem to load at all on our ancient ipad. I didn't bother debugging what was happening there. I made my brother test the remote connection from his flat in London. The text messaging worked but not the camera feed. I am guessing that's because it needs a TURN server to pipe the media stream in the data channel across the network but the text messaging could be passed more easily through STUN?
 
-## Research
+##  Further work
+The first place I would start on improving the application is refactoring the logic into smaller hooks. It's got two separate calls to connect to socket.io so I would implement a single call and then pass that down to the children components using a context provider so they could share the connection. I put all the logic into a single component to make it easier to write quickly but if I was putting this into production I would break it down into smaller chunks and write unit tests around my chunks. I decided I'd rather spend my time trying to get the interesting RTC stuff to work rather than refactoring React
+
 If I was going to extend the app to handle multiple users then I would probably want to hold a collection of instantiated peer connections and the session state of users joined to each room in the server. In a production scenario you'd probably want to bolt some kind of authentication on to users so I'm assuming you'd have a DB of users already.
 
 On the client side you'd probably want to expose the number of users connected to a room and their user details like name so I'd send that back to React to hold in client state, either in Redux or using a context provider.
