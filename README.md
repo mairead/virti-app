@@ -13,7 +13,7 @@ https://hidden-sierra-24434.herokuapp.com/
 - go to `localhost:3000` and you should see the homepage which allows you to choose a room
 - Type any keyword and click join room
 - you can now send the URL to another user/browser window to join the same room
-- multiple users can join the same room
+- multiple users can join the same room because the messages are using broadcast to emit to all connected users
 
 **OR**
 - alternatively you can visit https://hidden-sierra-24434.herokuapp.com/ and follow the same instructions to create and join a room
