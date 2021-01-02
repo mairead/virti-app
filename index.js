@@ -101,3 +101,12 @@ io.sockets.on('connection', function(socket) {
     console.log(`Peer said bye on room ${room}.`);
   });
 });
+
+
+// {
+//   'iceServers': [
+//     {
+//       'urls': 'stun:stun.l.google.com:19302'
+//     },
+//   ]
+// }
