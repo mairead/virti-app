@@ -36,15 +36,24 @@ Deployment examples for React/RTC to heroku:
 - https://www.youtube.com/watch?v=CrZ2JgLljAk
 
 ## Decisions
-I've done a lot of RTC stuff in the past but the last time I tried to work with it I found out PeerJS is not really supported any more and I didn't have any STUN or TURN provision so this time I started looking for examples where that was explicitly mentioned. I wasn't sure how robust the application had to be
+I've done a lot of RTC stuff in the past but the last time I tried to work with it I found out PeerJS is not really supported any more and I didn't have any STUN or TURN provision so this time I started looking for examples where that was explicitly mentioned. I wasn't sure how robust the application had to be. 
+
+I opted for Heroku for deployment because I've always used it in the past and I really like their documentation but I've also heard good things about netlify which seems very popular with the React community. 
 
 ## Concerns
-There isn't any STUN server configured in the app as it stands so I was actually surprised when my phone was able to connect over our home wifi. Although we have changed our home network since I last tried and failed to get something like this working which may account for that. I'd like to understand more about that and I'd like to be able to inspect the network traffic in a clearer way
+There isn't any STUN server configured in the app as it stands so I was actually surprised when my phone was able to connect over our home wifi. Although we have changed our home network since I last tried and failed to get something like this working which may account for that. I'd like to understand more about that and I'd like to be able to inspect the network traffic in a clearer way because I'm still hazy on exactly what's happening at the NAT layer. 
 
-Also the last time I tried to implement this feature I had to create an SSL certificate for the STUN service I was using so even though the heroku app is deployed on HTTPS I'd like to understand whether the messaging is actually encrypted and how that works. 
+Also the last time I tried to implement this feature I had to create an SSL certificate for the STUN service so I was expecting that to be a requirement for hosting in HTTPS. Even though the heroku app is deployed on HTTPS I'd like to understand whether the messaging is actually encrypted and how that works because I'm not hugely experienced in deployment and security architecture
 
 ## Research
-- expand to more than two users
-- add streaming for observation
-- frameworks and solutions
-- obstacles and pitfalls
+If I was going to extend the app to handle multiple users then I would probably want to hold a collection of instantiated peer connections and the session state of users joined to each room in the server. In a production scenario you'd probably want to bolt some kind of authentication on to users so I'm assuming you'd have a DB of users already.
+
+On the client side you'd probably want to expose the number of users connected to a room and their user details like name so I'd send that back to React to hold in client state, either in Redux or using a context provider.
+
+This HTML5rocks article goes into some good detail on different artchitectures for multi-person use https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/. Would you want to implement the Multipoint Control Unit suggested here to hold the media streams and send to connected peers?
+
+My primary concern would be video quality and bandwidth usage if you were to scale this application. You might want to create dynamic constraints on the video streaming. https://webrtc.org/getting-started/media-capture-and-constraints. I might also be concerned about device support. I've come across https://test.webrtc.org/ in the past which lets you inspect what your devices network capabilities are. I guess you'd want to make sure you've got a decent support list and that you can test those devices in those networking scenarios. Is it possible to mimic real world scenarios with throttling or controls? This seems like a challenge. 
+
+If you were paying for a hosted TURN server then I guess you might come up against increased costs in streaming video through the service. I've come across a handful of streaming services in the past. Twilio.io and Liveswitch.io are the full hosting service and expose their servers with an API. https://xirsys.com/ are a hosted TURN server so you would build your own streaming servers and just use their servers as a proxy gateway for the NAT traversal. You could also build and deploy your own TURN server so I guess it is a question of development cost and effort over absorbing the cost of paying for someone else's service. 
+
+I also came across callstats.io whilst looking for competitors of Liveswitch which looks like it might be a useful tool for getting live performance metrics. I've also come across https://testrtc.com/ in the past too and it looks really useful if you're serious about making production RTC applications
