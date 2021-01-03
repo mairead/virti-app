@@ -18,6 +18,9 @@ https://hidden-sierra-24434.herokuapp.com/
 **OR**
 - alternatively you can visit https://hidden-sierra-24434.herokuapp.com/ and follow the same instructions to create and join a room
 
+- Once you have two browser windows pointing at the same URL you should see two video camera feeds, one from each device
+- If you type a message into the textarea you should see your own message appear in your window, and the same message appear in the second browser
+
  
 ## Process
 I started with a refresher on basic WebRCT with the Google Codelabs example. I really like the snapshot of video feature so I took that as a basis for what I wanted to achieve. Then I looked for examples where people were using React hooks and Create react app to provide the client components so I could smush them together and make a React version. You can see a list of the tutorials I followed below:
@@ -27,7 +30,7 @@ I started with a refresher on basic WebRCT with the Google Codelabs example. I r
 - https://codelabs.developers.google.com/codelabs/webrtc-web#9
 - https://github.com/coding-with-chaim/native-webrtc
 
-Once I had a basic chat example working I started looking into deploying this onto Heroku and I realised I had to switch out my NodeStatic server for Express to be able to specify the static build folders for a compiled React app in the client. I got bogged down a lot trying get the CORS to stop complaining in localhost
+Once I had a basic chat example working I started looking into deploying this onto Heroku and I realised I had to switch out my NodeStatic server for Express to be able to specify the static build folders for a compiled React app in the client. I got bogged down a lot trying get the CORS to stop complaining in localhost. It's still not happy about the webpack proxy specified 
 
 Deployment examples for React/RTC to heroku:
 - https://github.com/mars/heroku-cra-node
@@ -41,6 +44,8 @@ I've done a bit of RTC stuff in the past but the last time I tried to work with 
 
 I opted for Heroku for deployment because I've always used it in the past and I really like their documentation but I've also heard good things about netlify which seems very popular with the React community. 
 
+The first place I would start on improving the application is refactoring the logic into smaller hooks. It's got two separate calls to connect to socket.io (because I was using 2 different examples to make the chat messages and the video messages) so I would implement a single call and then pass that down to the children components using a context provider so they could share the connection. I put all the logic into a single component to make it easier to write quickly but if I was putting this into production I would break it down into smaller chunks and write unit tests around my chunks. I've only started using Hooks recently and I decided I'd rather spend my time trying to get the interesting RTC stuff to work rather than refactoring React. I've got some dependency errors in React useEffect because I'm using it to initialise a bunch of stuff 
+
 ## Concerns
 I was surprised when my phone was able to connect over our home wifi before I added any STUN config. Although we have changed our home network since I last tried and failed to get something like this working which may account for that. I'd like to understand more about that and I'd like to be able to inspect the network traffic in a clearer way because I'm still hazy on exactly what's happening at the NAT layer. I found a couple of suggestions for plugins and extensions for debugging that.
 
@@ -48,11 +53,7 @@ Also the last time I tried to implement this feature I had to create an SSL cert
 
 I got it working across 2 separate laptops. The chat room page doesn't seem to load at all on our ancient ipad. I didn't bother debugging what was happening there. I made my brother test the remote connection from a separate location. The text messaging worked but not the camera feed. I am guessing that's because it needs a TURN server to pipe the media stream in the data channel across the network but the text messaging could be passed more easily through STUN? I suppose it could also be because it's not actually sending the page in an encrypted way because it doesn't have a certificate? I found the https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/ utility for checking if you've got correct STUN and TURN config
 
-I've got some dependency errors in React useEffect because I'm using it to initialise a bunch of stuff and I also have a proxy error in the client console which I was ignoring. 
-
 ##  Further work
-The first place I would start on improving the application is refactoring the logic into smaller hooks. It's got two separate calls to connect to socket.io (because I was using 2 different examples to make the chat messages and the video messages) so I would implement a single call and then pass that down to the children components using a context provider so they could share the connection. I put all the logic into a single component to make it easier to write quickly but if I was putting this into production I would break it down into smaller chunks and write unit tests around my chunks. I've only started using Hooks recently and I decided I'd rather spend my time trying to get the interesting RTC stuff to work rather than refactoring React
-
 If I was going to extend the app to handle multiple users then I would probably want to hold a collection of instantiated peer connections and the session state of users joined to each room in the server. In a production scenario you'd probably want to bolt some kind of authentication on to users so I'm assuming you'd have a DB of users already.
 
 On the client side you'd probably want to expose the number of users connected to a room and their user details like name so I'd send that back to React to hold in client state, either in Redux or using a context provider.
