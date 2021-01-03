@@ -14,10 +14,7 @@ https://hidden-sierra-24434.herokuapp.com/
 - Type any keyword and click join room
 - you can now send the URL to another user/browser window to join the same room
 - multiple users can join the same room because the messages are using broadcast to emit to all connected users
-
-**OR**
-- alternatively you can visit https://hidden-sierra-24434.herokuapp.com/ and follow the same instructions to create and join a room
-
+- **OR** alternatively you can visit https://hidden-sierra-24434.herokuapp.com/ and follow the same instructions to create and join a room
 - Once you have two browser windows pointing at the same URL you should see two video camera feeds, one from each device
 - If you type a message into the textarea you should see your own message appear in your window, and the same message appear in the second browser
 
